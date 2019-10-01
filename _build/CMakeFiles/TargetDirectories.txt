@@ -1,0 +1,7 @@
+/home/devborz/devborz/workspace/sources/lab-01-parser/_build/CMakeFiles/rebuild_cache.dir
+/home/devborz/devborz/workspace/sources/lab-01-parser/_build/CMakeFiles/tests.dir
+/home/devborz/devborz/workspace/sources/lab-01-parser/_build/CMakeFiles/parser.dir
+/home/devborz/devborz/workspace/sources/lab-01-parser/_build/CMakeFiles/main.dir
+/home/devborz/devborz/workspace/sources/lab-01-parser/_build/CMakeFiles/edit_cache.dir
+/home/devborz/devborz/workspace/sources/lab-01-parser/_build/CMakeFiles/Json.dir
+/home/devborz/devborz/workspace/sources/lab-01-parser/_build/CMakeFiles/test.dir
