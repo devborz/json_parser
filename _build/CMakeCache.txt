@@ -17,6 +17,9 @@
 //Build coverage
 BUILD_COVERAGE:BOOL=OFF
 
+//No help, variable specified on the command line.
+BUILD_TESTS:UNINITIALIZED=ON
+
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
@@ -100,7 +103,7 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=OFF
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/usr/local
+CMAKE_INSTALL_PREFIX:PATH=/home/devborz/devborz/workspace/sources/lab-01-parser/_install
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=/usr/bin/ld

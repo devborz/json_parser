@@ -55,6 +55,15 @@ target_link_libraries(main nlohmann_json::nlohmann_json)
 enable_testing()
 add_test(NAME unit_tests COMMAND tests) 
 
+install(TARGETS Json
+    EXPORT Json-config
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
+install(EXPORT Json-config DESTINATION cmake)
+
 if(BUILD_COVERAGE)
   set(ENABLE_TESTS ON CACHE BOOL "Enable coverage build." FORCE)
   list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
