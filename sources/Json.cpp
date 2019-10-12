@@ -26,7 +26,7 @@ bool Json::is_object() const{
     return _is_object;
 }
 
-any& Json::operator[](const string& key) {
+std::any& Json::operator[](const string& key) {
     if (Json::is_object()) {
         return this->_map[key];
     } else {
@@ -34,7 +34,7 @@ any& Json::operator[](const string& key) {
     }
 }
 
-any& Json::operator[](int index) {
+std::any& Json::operator[](int index) {
     if (is_array()) {
         return this->_arr[index];
     } else {
@@ -66,9 +66,10 @@ void Json::create_vector(const string& s) {
         miss_spaces(i, s);
         if (s[i] == '{') {
             string s1;
-
-            unsigned int end = find_end(i, s);
-            s1 = s.substr(i, end);
+            unsigned int n = find_end(i, s);
+            if(n == s.length())
+                throw std::logic_error("string is not valid");
+            s1 = s.substr(i, n - i + 1);
             Json obj(s1);
             this->_arr.emplace_back(obj._map);
             i += s1.length();
@@ -93,10 +94,10 @@ void Json::create_vector(const string& s) {
         }
         else if(s[i] == '[') {
             string s1;
-
-            unsigned int end = find_end(i, s);
-
-            s1 = s.substr(i, end);
+            unsigned int n = find_end(i, s);
+            if(n == s.length())
+                throw std::logic_error("string is not valid");
+            s1 = s.substr(i, n - i + 1);
             Json obj(s1);
             this->_arr.emplace_back(obj._arr);
             i += s1.length();
@@ -123,9 +124,9 @@ unsigned int Json::miss_spaces(unsigned int i, const string& s) {
     return i;
 }
 
-
+// string::find_end -> std::npos
 unsigned int Json::find_end(unsigned int i, const string& s) {
-    int cnt_open = 1 , cnt_close = 0;
+    unsigned int cnt_open = 1 , cnt_close = 0;
     char key1, key2;
     key2 = '}';
     key1 = '{';
@@ -134,17 +135,13 @@ unsigned int Json::find_end(unsigned int i, const string& s) {
         key2 = ']';
     }
 
-
     while(cnt_close != cnt_open && i < s.length()) {
         i++;
         if (s[i] == key1) cnt_open++;
         else if (s[i] == key2) cnt_close++;
     }
-
-    if(cnt_close != cnt_open) 
-        throw std::logic_error("String is not valid");
-     
-     return i;
+    if(cnt_close != cnt_open) return s.length();
+    return i;
 }
 
 void Json::create_map(const string& s) {
@@ -156,31 +153,26 @@ void Json::create_map(const string& s) {
         i = miss_spaces(i, s);
         if (s[i] != ':')
             throw std::logic_error("String is not valid");
-
         i++;
         i = miss_spaces(i, s);
         if (s[i] == '{') {
             string s1;
-            unsigned int end = find_end(i, s);
-        
-            s1 = s.substr(i, end);
-
+            unsigned int n = find_end(i, s);
+            if( n == s.length())
+                throw std::logic_error("string is not valid");
+            s1 = s.substr(i, n - i + 1);
             Json obj(s1);
             this->_map[key] = obj._map;
             i += s1.length();
-
         }
         else if (s[i] == '\"') {
-
             string word;
             word = read_key(i, s);
             i = miss_spaces(i, s);
             this->_map[key] = word;
-
         }
         else if ((s[i] == 't' && s[i + 1] == 'r' && s[i + 2] == 'u' && s[i + 3] == 'e') ||
                  (s[i] == 'f' && s[i + 1] == 'a' &&s[i + 2] == 'l' && s[i + 3] == 's' && s[i + 4] == 'e')) {
-            
             bool x;
             if(s[i] == 't') {
                 i += 4;
@@ -191,22 +183,20 @@ void Json::create_map(const string& s) {
                 x = false;
             }
             this->_map[key] = x;
-        
         }
         else if(s[i] == '[') {
-           
             string s1;
-            unsigned int end = find_end(i, s);
+            unsigned int  n = find_end(i, s);
+            if( n == s.length())
+                throw std::logic_error("string is not valid");
 
-            s1 = s.substr(i, end);
+            s1 = s.substr(i, n - i + 1);
 
             Json obj(s1);
             this->_map[key] = obj._arr;
             i += s1.length();
-        
         }
         else if(std::isdigit(static_cast<unsigned char>(s[i])) || (s[i] == '-'  && std::isdigit(static_cast<unsigned char>(s[i + 1])))) {
-           
             string num = cut_num(i, s);
             i += num.length();
             double d = stod(num);
@@ -215,68 +205,59 @@ void Json::create_map(const string& s) {
                 this->_map[key] = n;
             } else
                 this->_map[key] = d;
-
         }
         i = miss_spaces(i, s);
     }
 }
 
 string Json::cut_num(unsigned int i, const string& s) {
-    
     unsigned int st = i;
     string num;
     while (isdigit(static_cast<unsigned char>(s[i]))) i++;
     num = s.substr(st, i - st);
     return num;
-
 }
 string Json::read_key(unsigned int &i, const string& s) {
-    
     unsigned int st;
     string key;
     i = miss_spaces(i, s);
-
     if (s[i] == '\"') {
         i++;
         st = i;
     }
     else throw std::logic_error("string isn't valid!");
-    
     while (s[i] != '"') i++;
     key = s.substr(st, i - st);
     i++;
     return key;
-
 }
 void Json::print_map() {
     cout << "{\n";
-    int count = 0;
     for(const auto& p  : this->_map) {
-
-        if(count++ > 0) cout << ",\n";
         cout << "    " << p.first << " : ";
         print(p.second);
-
+        cout << std::endl;
     }
-    cout << "\n}\n";
+    cout << "}\n";
 }
 void Json::print(any _data) {
+    string type = _data.type().name();
     try {
-        if (_data.type() == typeid(int)) {
-            cout << any_cast<int>(_data);
+        if (type == "i") {
+            cout << any_cast<int> (_data);
         }
-        else if(_data.type() == typeid(double)) {
-            cout << any_cast<double>(_data);
+        else if (type == "d") {
+            cout << any_cast<double> (_data);
         }
-        else if (_data.type() == typeid(bool)) {
-            if (any_cast<bool>(_data)) cout << "true";
+        else if (type == "b") {
+            if (any_cast<bool> (_data)) std::cout << "true";
             else cout << "false";
         }
-        else if (_data.type() == typeid(string)) {
-            cout << any_cast<string>(_data);
+        else if (type == "Ss" ) {
+            cout << any_cast<string> (_data);
         }
-        else if (_data.type() == typeid(vector <any>)) {
-            vector <any> vec;
+        else if (type.find("St6vector") < type.length()) {
+            std::vector <std::any> vec;
             vec = any_cast<vector<any>>(_data);
             unsigned int count = 0;
             cout << "[ ";
@@ -287,14 +268,14 @@ void Json::print(any _data) {
             }
             cout << " ]";
         }
-        else if (_data.type() ==  typeid(map <string, any>)) {
+        else if (type.find("St3map") < type.length()) {
             map <string, any> _map;
             _map = std::any_cast<map <string, any>>(_data);
             cout << "{\n" ;
             unsigned int count = 0;
             for(const auto& c: _map) {
                 count++;
-                if (count > 1) cout << ",\n";
+                if (count > 1) cout << " ,\n";
                 cout << "\t" << c.first << " : ";
                 print(c.second);
             }

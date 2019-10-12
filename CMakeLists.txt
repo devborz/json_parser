@@ -44,12 +44,12 @@ add_executable(main ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp)
 target_include_directories(Json
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-target_include_directories(tests 
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+#target_include_directories(tests 
+#  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+#)
 
 target_link_libraries(parser Json nlohmann_json::nlohmann_json) 
-target_link_libraries(tests GTest::main Json)
+target_link_libraries(tests Json GTest::main)
 target_link_libraries(main nlohmann_json::nlohmann_json)
 
 enable_testing()
