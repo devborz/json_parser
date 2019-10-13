@@ -1,4 +1,0 @@
-/home/devborz/devborz/workspace/sources/lab-01-parser/_install/lib/libJson.a
-/home/devborz/devborz/workspace/sources/lab-01-parser/_install/include/Json.h
-/home/devborz/devborz/workspace/sources/lab-01-parser/_install/cmake/Json-config.cmake
-/home/devborz/devborz/workspace/sources/lab-01-parser/_install/cmake/Json-config-noconfig.cmake
