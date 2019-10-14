@@ -39,14 +39,14 @@ add_executable(tests
 add_executable(parser
   ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp)
 
-add_executable(main ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp)
+add_executable(main 
+  ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp)
 
-target_include_directories(Json
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-#target_include_directories(tests 
-#  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-#)
+target_include_directories(Json PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+ )
+
 
 target_link_libraries(parser Json nlohmann_json::nlohmann_json) 
 target_link_libraries(tests Json GTest::main)
