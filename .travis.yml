@@ -4,7 +4,7 @@ script:
 - export CXX="g++-8" CC="gcc-8"
 - cmake -H. -B_build # -DCMAKE_INSTALL_PREFIX=_install -DBUILD_TESTS=ON
 - cmake --build _build 
-- cmake --build _build --target parser
+- _build/parser
 
 
 addons:
