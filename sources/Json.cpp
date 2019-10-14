@@ -229,19 +229,23 @@ string Json::read_key(unsigned int &i, const string& s) {
     while (s[i] != '"') i++;
     key = s.substr(st, i - st);
     i++;
+    
     return key;
 }
 void Json::print_map() {
     cout << "{\n";
+    int i = 0;
     for(const auto& p  : this->_map) {
+        if (i != 0) cout << ",\n";
         cout << "    " << p.first << " : ";
         print(p.second);
-        cout << std::endl;
+        i++;
     }
     cout << "}\n";
 }
 void Json::print(any _data) {
     string type = _data.type().name();
+   
     try {
         if (type == "i") {
             cout << any_cast<int> (_data);
@@ -253,7 +257,7 @@ void Json::print(any _data) {
             if (any_cast<bool> (_data)) std::cout << "true";
             else cout << "false";
         }
-        else if (type == "Ss" ) {
+        else if (type == "Ss" ||type == "NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE") {
             cout << any_cast<string> (_data);
         }
         else if (type.find("St6vector") < type.length()) {
