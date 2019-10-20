@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/devborz/lab-01-parser.svg?branch=master)](https://travis-ci.org/devborz/lab-01-parser)
+[![Build Status](https://travis-ci.org/devborz/lab_01_parser.svg?branch=master)](https://travis-ci.org/devborz/lab_01_parser)
 # Задание 1
 Реализовать парсер данных в формате JSON.
 
